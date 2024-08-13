@@ -37,6 +37,8 @@ jobs:
         run: |
             title=$(gh pr view ${{ github.event.pull_request.number }} --json title --jq '.title')
 
+            echo "$title"
+            
             # Define allowed Conventional Commit types
             allowed_types="feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
 
