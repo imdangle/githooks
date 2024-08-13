@@ -47,22 +47,6 @@ jobs:
             echo "::error::Pull request title does not follow the required format"
             exit 1
             fi
-
-      - name: Check description
-        run: |
-            body=$(gh pr view ${{ github.event.pull_request.number }} --json body --jq '.body')
-            if [[ ! $body =~ "## Description" ]] || [[ ! $body =~ "## Changes Made" ]] || [[ ! $body =~ "## Related Issue" ]]; then
-            echo "::error::Pull request description is missing required sections (Description, Changes Made, Related Issue)"
-            exit 1
-            fi
-            if [[ ! $body =~ "- \[ \]" ]]; then
-            echo "::error::Pull request description is missing checklist items under 'Changes Made'"
-            exit 1
-            fi
-            if [[ ! $body =~ "Closes #[0-9]+" ]]; then
-            echo "::error::Pull request description's 'Related Issue' section does not follow the 'Closes #<issue_number>' format"
-            exit 1
-            fi
       
       - name: Check description
         run: |
