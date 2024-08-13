@@ -43,9 +43,9 @@ jobs:
             allowed_types="feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
 
             # Check if title matches the pattern: <type>: #<issue_number>
-            if ! echo "$title" | grep -Eq "^($allowed_types): #[0-9]+$"; then
-              echo "::error::Pull request title does not follow the required '<Conventional Commit type>: #<issue_number>' format"
-              exit 1
+            if ! echo "$title" | grep -Eq "^($allowed_types)(?:\(.+\))?: (?:#[0-9]+|.*)$"; then
+            echo "::error::Pull request title does not follow the required format"
+            exit 1
             fi
 
       - name: Check description
