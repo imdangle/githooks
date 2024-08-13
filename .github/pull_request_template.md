@@ -6,12 +6,10 @@ A brief description of the purpose of this pull request.
 
 Describe the changes you made in this pull request.
 
+- [ ] Change 1
+- [ ] Change 2
+- [ ] Change 3
+
 ## Related Issue
 
-Closes # (issue number)
-
-## Checklist
-
-- [ ] Task 1
-- [ ] Task 1
-- [ ] Task 1
+Closes # (issue number) (CAUTION: no space between #_and_issue_number)
