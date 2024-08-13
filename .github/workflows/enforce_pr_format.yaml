@@ -43,7 +43,7 @@ jobs:
             allowed_types="feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
 
             # Check if title matches the pattern: <type>: #<issue_number>
-            if [[ ! $title =~ '^($allowed_types): #[0-9]+$' ]]; then
+            if ! echo "$title" | grep -Eq "^($allowed_types): #[0-9]+$"; then
               echo "::error::Pull request title does not follow the required '<Conventional Commit type>: #<issue_number>' format"
               exit 1
             fi
@@ -63,3 +63,33 @@ jobs:
             echo "::error::Pull request description's 'Related Issue' section does not follow the 'Closes #<issue_number>' format"
             exit 1
             fi
+      
+      - name: Check description
+        run: |
+          body=$(gh pr view ${{ github.event.pull_request.number }} --json body --jq '.body')
+
+          # Check for required sections
+          if ! echo "$body" | grep -q "## Description"; then
+            echo "::error::Pull request description is missing the 'Description' section"
+            exit 1
+          fi
+          if ! echo "$body" | grep -q "## Changes Made"; then
+            echo "::error::Pull request description is missing the 'Changes Made' section"
+            exit 1
+          fi
+          if ! echo "$body" | grep -q "## Related Issue"; then
+            echo "::error::Pull request description is missing the 'Related Issue' section"
+            exit 1
+          fi
+
+          # Check for checklist items under "Changes Made"
+          if ! echo "$body" | grep -q "- \[ \]"; then
+            echo "::error::Pull request description is missing checklist items under 'Changes Made'"
+            exit 1
+          fi
+
+          # Check for "Closes #" format in "Related Issue"
+          if ! echo "$body" | grep -q "Closes #[0-9]+"; then
+            echo "::error::Pull request description's 'Related Issue' section does not follow the 'Closes #<issue_number>' format"
+            exit 1
+          fi
